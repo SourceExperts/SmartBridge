@@ -38,7 +38,7 @@ public class LaunchpadParserService
         List<Startup> startupDAOList = new ArrayList<>();
         Objects.requireNonNull(startupList).getItems().forEach(s -> startupDAOList.add(new Startup(s)));
         startupRepository.saveAll(startupDAOList);
-        startupRepository.findAll().forEach(startup -> log.info("{}", startup));
+//        startupRepository.findAll().forEach(startup -> log.info("{}", startup));
     }
 
 
@@ -50,6 +50,6 @@ public class LaunchpadParserService
         List<Corporate> corporates = new ArrayList<>();
         Objects.requireNonNull(corporateList).getItems().forEach(s -> corporates.add(new Corporate(s)));
         corporateRepository.saveAll(corporates);
-        corporateRepository.findAll().forEach(corporate -> log.info("{}", corporate));
+//        corporateRepository.findAll().forEach(corporate -> log.info("{}", corporate));
     }
 }
