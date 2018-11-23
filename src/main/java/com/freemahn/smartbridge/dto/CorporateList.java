@@ -10,8 +10,8 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString
-public class StartupList
+public class CorporateList
 {
-    private final List<StartupDTO> items = new ArrayList<>();
+    private final List<CorporateDTO> items = new ArrayList<>();
 
 }

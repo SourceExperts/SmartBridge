@@ -23,6 +23,7 @@ public class DataLoader implements CommandLineRunner
     public void run(String... args) throws Exception
     {
 
-        launchpadParserService.fetchData();
+        launchpadParserService.fetchStartupData();
+        launchpadParserService.fetchCorporatesData();
     }
 }

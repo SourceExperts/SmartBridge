@@ -46,6 +46,7 @@ public class Startup
     {
         this.id = Long.parseLong(startupDTO.getId());
         this.type = startupDTO.getType();
+        this.name = startupDTO.getName();
         this.shortDescription = startupDTO.getShortDescription();
         this.description = startupDTO.getDescription();
         this.founded = startupDTO.getFounded();
