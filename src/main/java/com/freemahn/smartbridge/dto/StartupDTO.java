@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-class Startup
+public class StartupDTO
 {
-
-
-
     private String type;
     private String id;
     private String name;
@@ -25,7 +22,7 @@ class Startup
     private Logo logo;
     private ArrayList<String> industries;
 
-    public Startup()
+    public StartupDTO()
     {
         industries = new ArrayList<>();
     }

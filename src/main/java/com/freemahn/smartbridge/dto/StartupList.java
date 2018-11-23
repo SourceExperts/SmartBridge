@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class StartupList
 {
-    private List<Startup> items;
+    private List<StartupDTO> items;
 
 
     public StartupList()
