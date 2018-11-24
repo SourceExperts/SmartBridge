@@ -1,6 +1,5 @@
 package com.freemahn.smartbridge.service;
 
-import com.freemahn.smartbridge.controller.CorporateController;
 import com.freemahn.smartbridge.dao.Corporate;
 import com.freemahn.smartbridge.dao.Startup;
 import com.freemahn.smartbridge.dao.company.CompanyPreferableOptions;
@@ -43,8 +42,12 @@ public class BridgeService
     public List<Bridge> findByBridgeRequest(CompanyPreferableOptions companyPreferableOptions)
     {
         List<Bridge> all = bridgeRepository.findAll();
+
+        log.info("Finding all britches, which corporate has industry {}", companyPreferableOptions.getIndustry());
         all = all.stream().filter(bridge -> {
             boolean matchIndustry = bridge.getCorporate().getIndustries().contains(companyPreferableOptions.getIndustry());
+            log.info("bridge name [{}],result {},  industries {}, ", bridge.getName(), matchIndustry, bridge.getCorporate().getIndustries());
+
             return matchIndustry;
         }).collect(Collectors.toList());
         return all;

@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +19,11 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "bridge",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"corporate_id", "startup_id", "name"})})
+@Table(name = "bridge"
+    //    ,
+    //    uniqueConstraints = {@UniqueConstraint(columnNames = {"corporate_id", "startup_id", "name"})
+    //    }
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

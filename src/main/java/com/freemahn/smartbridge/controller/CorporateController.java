@@ -1,6 +1,7 @@
 package com.freemahn.smartbridge.controller;
 
 import com.freemahn.smartbridge.dao.Corporate;
+import com.freemahn.smartbridge.dao.Startup;
 import com.freemahn.smartbridge.dao.company.CompanyPreferableOptions;
 import com.freemahn.smartbridge.dao.match.Bridge;
 import com.freemahn.smartbridge.dto.Payload;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -73,6 +75,12 @@ public class CorporateController
         bridgeService.createBridge(corporateId, payload);
     }
 
+
+    @GetMapping("/api/corporates/{id}/explore")
+    public List<Startup> getExplorationStartups(@PathVariable("id") long companyId)
+    {
+        return startupSuggestionService.doExploreMagic(companyId);
+    }
 
 
 }

@@ -6,9 +6,6 @@ import com.freemahn.smartbridge.repository.StartupRepository;
 import com.freemahn.smartbridge.service.StartupSuggestionService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,10 +42,4 @@ public class StartupController
     }
 
 
-
-    @GetMapping("/api/startups/explore")
-    public List<Startup> getExplorationStartups(@RequestParam long companyId)
-    {
-        return startupSuggestionService.doExploreMagic(companyId);
-    }
 }

@@ -90,7 +90,7 @@ public class StartupSuggestionService
     {
         CompanyPreferableOptions defaultCorporateCompanyPreferableOptions = corporateRepository.getOne(companyId).getAccount();
         List<Bridge> previousMatches = bridgeService.findByBridgeRequest(defaultCorporateCompanyPreferableOptions);
-        return previousMatches.stream().map(Bridge::getMatchedStartup).collect(Collectors.toList());
+        return previousMatches.stream().map(Bridge::getMatchedStartup).limit(3).collect(Collectors.toList());
     }
 
 
