@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "bridge")
+@Table(name = "bridge",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"corporate_id", "startup_id", "name"})})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +39,7 @@ public class Bridge
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "startup_id")
+
     @OnDelete(action = OnDeleteAction.CASCADE)
     Startup matchedStartup;
     private final LocalDateTime createdAt = LocalDateTime.now();
@@ -46,3 +49,4 @@ public class Bridge
 
 
 }
+

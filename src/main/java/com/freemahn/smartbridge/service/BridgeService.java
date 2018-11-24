@@ -1,22 +1,34 @@
 package com.freemahn.smartbridge.service;
 
+import com.freemahn.smartbridge.controller.CorporateController;
+import com.freemahn.smartbridge.dao.Corporate;
+import com.freemahn.smartbridge.dao.Startup;
 import com.freemahn.smartbridge.dao.company.CompanyPreferableOptions;
 import com.freemahn.smartbridge.dao.match.Bridge;
+import com.freemahn.smartbridge.dto.Payload;
 import com.freemahn.smartbridge.repository.BridgeRepository;
+import com.freemahn.smartbridge.repository.CorporateRepository;
+import com.freemahn.smartbridge.repository.StartupRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
+@Slf4j
 public class BridgeService
 {
     private final BridgeRepository bridgeRepository;
+    private final CorporateRepository corporateRepository;
+    private final StartupRepository startupRepository;
 
 
-    public BridgeService(BridgeRepository bridgeRepository)
+    public BridgeService(BridgeRepository bridgeRepository, CorporateRepository corporateRepository, StartupRepository startupRepository)
     {
         this.bridgeRepository = bridgeRepository;
+        this.corporateRepository = corporateRepository;
+        this.startupRepository = startupRepository;
     }
 
 
@@ -36,5 +48,27 @@ public class BridgeService
             return matchIndustry;
         }).collect(Collectors.toList());
         return all;
+    }
+
+
+    public void createBridge(long corporateId, Payload payload)
+    {
+        Corporate corporate = corporateRepository.getOne(corporateId);
+        Startup startup = startupRepository.getOne(payload.getStartupId());
+        Bridge bridge = Bridge.builder()
+            .corporate(corporate)
+            .matchedStartup(startup)
+            .name(payload.getName())
+            .description(payload.getDescription())
+            .build();
+        bridgeRepository.save(bridge);
+        log.info("Bridge {} created. Matched company {} with startup {}", payload.getName(),
+            corporate, startup);
+    }
+
+
+    public List<Bridge> fetchBridges(long corporateId)
+    {
+        return bridgeRepository.findAllByCorporate(corporateRepository.getOne(corporateId));
     }
 }

@@ -1,5 +1,6 @@
 package com.freemahn.smartbridge.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.freemahn.smartbridge.dao.company.CompanyPreferableOptions;
 import com.freemahn.smartbridge.dto.CorporateDTO;
 import java.util.List;
@@ -23,7 +24,7 @@ import org.hibernate.annotations.FetchMode;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Corporate
 {
     @ToString.Include

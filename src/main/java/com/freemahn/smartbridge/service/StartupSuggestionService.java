@@ -51,14 +51,14 @@ public class StartupSuggestionService
                     .contains(companyPreferableOptions.getIndustry().toLowerCase());
                 boolean cityEqual = startup.getCity().equalsIgnoreCase(companyPreferableOptions.getLocation());
 
-                if (!industriesEqual)
-                {
-                    log.info("industries {}/{}", companyPreferableOptions.getIndustry(), startup.getIndustries());
-                }
-                if (!cityEqual)
-                {
-                    log.info("city {}/{}", companyPreferableOptions.getLocation(), startup.getCity());
-                }
+//                if (!industriesEqual)
+//                {
+//                    log.info("industries {}/{}", companyPreferableOptions.getIndustry(), startup.getIndustries());
+//                }
+//                if (!cityEqual)
+//                {
+//                    log.info("city {}/{}", companyPreferableOptions.getLocation(), startup.getCity());
+//                }
 
                 log.info("Startup {}, industries {}, city {}", startup.getName(), industriesEqual, cityEqual);
                 log.info("===================================");
@@ -94,24 +94,5 @@ public class StartupSuggestionService
     }
 
 
-    public void createBridge(long corporateId, CorporateController.Payload payload)
-    {
-        Corporate corporate = corporateRepository.getOne(corporateId);
-        Startup startup = startupRepository.getOne(payload.getStartupId());
-        Bridge bridge = Bridge.builder()
-            .corporate(corporate)
-            .matchedStartup(startup)
-            .name(payload.getName())
-            .description(payload.getDescription())
-            .build();
-        bridgeRepository.save(bridge);
-        log.info("Bridge {} created. Matched company {} with startup {}", payload.getName(),
-            corporate, startup);
-    }
 
-
-    public void fetchBridges(long corporateId)
-    {
-        bridgeRepository.findAllByCorporate(corporateRepository.getOne(corporateId));
-    }
 }
