@@ -1,5 +1,6 @@
 package com.freemahn.smartbridge.dao;
 
+import com.freemahn.smartbridge.dao.company.CorporateAccount;
 import com.freemahn.smartbridge.dto.CorporateDTO;
 import java.util.List;
 import javax.persistence.ElementCollection;
@@ -8,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,6 +43,9 @@ public class Corporate
     private boolean publishChallenges;
     @Embedded
     private Logo logo;
+
+    @Embedded
+    private CorporateAccount account;
 
 
     public Corporate(CorporateDTO corporateDTO)
