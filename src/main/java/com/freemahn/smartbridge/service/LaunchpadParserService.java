@@ -21,29 +21,46 @@ public class LaunchpadParserService
 
     private StartupRepository startupRepository;
     private CorporateRepository corporateRepository;
+    private final MattermarkParserService mattermarkParserService;
 
 
-    public LaunchpadParserService(StartupRepository startupRepository, CorporateRepository corporateRepository)
+    public LaunchpadParserService(
+        StartupRepository startupRepository,
+        CorporateRepository corporateRepository,
+        MattermarkParserService mattermarkParserService)
     {
         this.startupRepository = startupRepository;
         this.corporateRepository = corporateRepository;
+        this.mattermarkParserService = mattermarkParserService;
     }
 
 
     public void fetchStartupData()
     {
+        if (!startupRepository.findAll().isEmpty())
+        {
+            return;
+        }
         RestTemplate restTemplate = new RestTemplate();
-        StartupList startupList = restTemplate.getForObject(URL + "_ah/api/company/v1/startups", StartupList.class);
+        StartupList startupDTOList = restTemplate.getForObject(URL + "_ah/api/company/v1/startups", StartupList.class);
 
-        List<Startup> startupDAOList = new ArrayList<>();
-        Objects.requireNonNull(startupList).getItems().forEach(s -> startupDAOList.add(new Startup(s)));
-        startupRepository.saveAll(startupDAOList);
+        List<Startup> startupList = new ArrayList<>();
+        Objects.requireNonNull(startupDTOList).getItems().forEach(s -> startupList.add(new Startup(s)));
+        //save only new ones
+        startupList.removeIf(x -> {
+            return startupRepository.existsById(x.getId());
+        });
+        startupRepository.saveAll(startupList);
 //        startupRepository.findAll().forEach(startup -> log.info("{}", startup));
     }
 
 
     public void fetchCorporatesData()
     {
+        if (!corporateRepository.findAll().isEmpty())
+        {
+            return;
+        }
         RestTemplate restTemplate = new RestTemplate();
         CorporateList corporateList = restTemplate.getForObject(URL + "_ah/api/company/v1/corporates", CorporateList.class);
 

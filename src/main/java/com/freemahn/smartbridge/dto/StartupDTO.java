@@ -32,7 +32,7 @@ public class StartupDTO
     @AllArgsConstructor
     public class Logo
     {
-        private String id;
+        private Long id;
         private String imageServiceUrl;
         private String fileName;
     }

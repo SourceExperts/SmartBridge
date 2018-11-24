@@ -3,6 +3,7 @@ package com.freemahn.smartbridge.dao;
 import com.freemahn.smartbridge.dto.StartupDTO;
 import java.util.List;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -40,6 +41,11 @@ public class Startup
     private boolean published;
     @ElementCollection(fetch= FetchType.EAGER)
     private List<String> industries;
+    @Embedded
+    private Logo logo;
+
+    @Embedded
+    private CompanyMetadata companyMetadata;
 
 
     public Startup(StartupDTO startupDTO)

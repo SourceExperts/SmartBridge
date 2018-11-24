@@ -3,14 +3,18 @@ package com.freemahn.smartbridge.dao;
 import com.freemahn.smartbridge.dto.CorporateDTO;
 import java.util.List;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "corporate")
@@ -33,7 +37,12 @@ public class Corporate
     private boolean published;
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> industries;
+    @Fetch(FetchMode.SELECT)
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> interests;
     private boolean publishChallenges;
+    @Embedded
+    private Logo logo;
 
 
     public Corporate(CorporateDTO corporateDTO)
