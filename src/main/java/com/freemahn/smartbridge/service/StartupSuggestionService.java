@@ -1,6 +1,5 @@
 package com.freemahn.smartbridge.service;
 
-import com.freemahn.smartbridge.controller.CorporateController;
 import com.freemahn.smartbridge.dao.Corporate;
 import com.freemahn.smartbridge.dao.Startup;
 import com.freemahn.smartbridge.dao.company.CompanyPreferableOptions;
@@ -23,6 +22,7 @@ public class StartupSuggestionService
     private final StartupRepository startupRepository;
     private final BridgeRepository bridgeRepository;
     private final BridgeService bridgeService;
+    private static final int MAX_SIZE = 21;
 
 
     public StartupSuggestionService(
@@ -45,28 +45,91 @@ public class StartupSuggestionService
         CompanyPreferableOptions companyPreferableOptions = corporate.getAccount();
         List<Startup> startups = startupRepository.findAll();
 
-        startups = startups.stream().filter(startup -> {
+        List<Startup> filteredBy3Startups = startups.stream().filter(startup -> {
+
+                boolean industriesEqual = startup.getIndustries().stream().map(String::toLowerCase).collect(Collectors.toList())
+                    .contains(companyPreferableOptions.getIndustry().toLowerCase());
+                boolean cityEqual = startup.getCity().equalsIgnoreCase(companyPreferableOptions.getLocation());
+            boolean stageEqual = startup.getInfo().getStage().equalsIgnoreCase(companyPreferableOptions.getStage());
+
+            log.info("Startup {}, industries: {}, city: {}, stage: {}", startup.getName(), industriesEqual, cityEqual, stageEqual);
+                log.info("===================================");
+            return industriesEqual && cityEqual && stageEqual;
+            }
+
+        ).collect(Collectors.toList());
+
+        if (filteredBy3Startups.size() >= MAX_SIZE)
+        {
+            return filteredBy3Startups.stream().limit(MAX_SIZE).collect(Collectors.toList());
+        }
+
+        startups.removeAll(filteredBy3Startups);
+        List<Startup> filteredBy2Startups = startups.stream().filter(startup -> {
 
                 boolean industriesEqual = startup.getIndustries().stream().map(String::toLowerCase).collect(Collectors.toList())
                     .contains(companyPreferableOptions.getIndustry().toLowerCase());
                 boolean cityEqual = startup.getCity().equalsIgnoreCase(companyPreferableOptions.getLocation());
 
-//                if (!industriesEqual)
-//                {
-//                    log.info("industries {}/{}", companyPreferableOptions.getIndustry(), startup.getIndustries());
-//                }
-//                if (!cityEqual)
-//                {
-//                    log.info("city {}/{}", companyPreferableOptions.getLocation(), startup.getCity());
-//                }
-
-                log.info("Startup {}, industries {}, city {}", startup.getName(), industriesEqual, cityEqual);
+                log.info("Startup {}, industries: {}, city: {}", startup.getName(), industriesEqual, cityEqual);
                 log.info("===================================");
                 return industriesEqual && cityEqual;
             }
 
         ).collect(Collectors.toList());
 
+        filteredBy3Startups.addAll(filteredBy2Startups);
+
+        if (filteredBy3Startups.size() >= MAX_SIZE)
+        {
+            return filteredBy3Startups.stream().limit(MAX_SIZE).collect(Collectors.toList());
+        }
+        startups.removeAll(filteredBy2Startups);
+
+        List<Startup> filteredBy1Startups = startups.stream().filter(startup -> {
+
+                boolean industriesEqual = startup.getIndustries().stream().map(String::toLowerCase).collect(Collectors.toList())
+                    .contains(companyPreferableOptions.getIndustry().toLowerCase());
+
+                log.info("Startup {}, industries: {}", startup.getName(), industriesEqual);
+                log.info("===================================");
+                return industriesEqual;
+            }
+
+        ).collect(Collectors.toList());
+
+        filteredBy3Startups.addAll(filteredBy1Startups);
+        if (filteredBy3Startups.size() >= MAX_SIZE)
+        {
+            return filteredBy3Startups.stream().limit(MAX_SIZE).collect(Collectors.toList());
+        }
+
+        startups.removeAll(filteredBy1Startups);
+        startups.sort((x, y) -> {
+            if (x.getInfo() != null && y.getInfo() != null)
+            {
+                if (x.getInfo().getMattermarkScore() != null && y.getInfo().getMattermarkScore() != null)
+                {
+                    return x.getInfo().getMattermarkScore() - y.getInfo().getMattermarkScore();
+                }
+                
+                if(x.getInfo().getMattermarkScore() == null){
+                    return -1;
+                }
+                if(y.getInfo().getMattermarkScore() == null){
+                    return 1;
+                }
+            }
+            if (x.getInfo() == null)
+            {
+                return -1;
+            }
+            if (y.getInfo() == null)
+            {
+                return 1;
+            }
+            return 0;
+        });
         //        Bridge matchHistory = Bridge.builder()
         //            .companyPreferableOptions(companyPreferableOptions)
         //            .matchedStartups(startups)
@@ -74,7 +137,9 @@ public class StartupSuggestionService
         //            .build();
         //        bridgeRepository.save(matchHistory);
 
-        return startups;
+        filteredBy3Startups.addAll(startups);
+
+        return filteredBy3Startups.stream().limit(MAX_SIZE).collect(Collectors.toList());
 
     }
 
@@ -92,7 +157,6 @@ public class StartupSuggestionService
         List<Bridge> previousMatches = bridgeService.findByBridgeRequest(defaultCorporateCompanyPreferableOptions);
         return previousMatches.stream().map(Bridge::getMatchedStartup).limit(3).collect(Collectors.toList());
     }
-
 
 
 }

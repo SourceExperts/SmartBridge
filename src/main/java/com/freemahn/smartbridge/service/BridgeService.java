@@ -32,6 +32,8 @@ public class BridgeService
 
 
     /**
+     *
+     * EXPLORE-feature
      * Finds all prevous 'similar' matches
      * in current implementation 'similar' means companies with same industries
      *
