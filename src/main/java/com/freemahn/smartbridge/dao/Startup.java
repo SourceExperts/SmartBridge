@@ -1,6 +1,5 @@
 package com.freemahn.smartbridge.dao;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.freemahn.smartbridge.dao.mattermark.CompanyInfoDTO;
 import com.freemahn.smartbridge.dto.StartupDTO;
 import java.util.List;
@@ -14,25 +13,27 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "startup")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
+@ToString(onlyExplicitlyIncluded = true)
 public class Startup
 {
     @Id
-    //    @GeneratedValue(generator = "startup_generator")
-    //    @SequenceGenerator(
-    //        name = "startup_generator",
-    //        sequenceName = "startup_sequence",
-    //        initialValue = 1000
-    //    )
+    @ToString.Include
     private Long id;
+    @ToString.Include
+    private String name;
 
     private String type;
-    private String name;
+
     private String shortDescription;
     @Lob
     private String description;
@@ -41,7 +42,9 @@ public class Startup
     private String city;
     private String country;
     private boolean published;
-    @ElementCollection(fetch= FetchType.EAGER)
+
+    @Fetch(FetchMode.SELECT)
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> industries;
     @Embedded
     private Logo logo;

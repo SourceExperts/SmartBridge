@@ -1,9 +1,14 @@
 package com.freemahn.smartbridge.controller;
 
 import com.freemahn.smartbridge.dao.Startup;
+import com.freemahn.smartbridge.repository.CorporateRepository;
 import com.freemahn.smartbridge.repository.StartupRepository;
+import com.freemahn.smartbridge.service.StartupSuggestionService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,11 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class StartupController
 {
     private final StartupRepository startupRepository;
+    private final CorporateRepository corporateRepository;
+    private final StartupSuggestionService startupSuggestionService;
 
 
-    public StartupController(StartupRepository startupRepository)
+    public StartupController(
+        StartupRepository startupRepository,
+        CorporateRepository corporateRepository,
+        StartupSuggestionService startupSuggestionService)
     {
         this.startupRepository = startupRepository;
+        this.corporateRepository = corporateRepository;
+        this.startupSuggestionService = startupSuggestionService;
     }
 
 
@@ -26,9 +38,17 @@ public class StartupController
     }
 
 
-    @GetMapping("api/startups/suggested")
+    @GetMapping("/api/startups/suggested")
     public List<Startup> getSuggested(@RequestParam long companyId)
     {
-        return startupRepository.findAllByMetadataCompanyIdNotNull();
+        return startupSuggestionService.doSuggestionMagic(companyId);
+    }
+
+
+
+    @GetMapping("/api/startups/explore")
+    public List<Startup> getExplorationStartups(@RequestParam long companyId)
+    {
+        return startupSuggestionService.doExploreMagic(companyId);
     }
 }

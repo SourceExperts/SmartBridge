@@ -1,6 +1,6 @@
 package com.freemahn.smartbridge.dao;
 
-import com.freemahn.smartbridge.dao.company.CorporateAccount;
+import com.freemahn.smartbridge.dao.company.CompanyPreferableOptions;
 import com.freemahn.smartbridge.dto.CorporateDTO;
 import java.util.List;
 import javax.persistence.ElementCollection;
@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -21,12 +22,16 @@ import org.hibernate.annotations.FetchMode;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+
 public class Corporate
 {
+    @ToString.Include
     @Id
     private Long id;
 
     private String type;
+    @ToString.Include
     private String name;
     private String shortDescription;
     @Lob
@@ -45,7 +50,7 @@ public class Corporate
     private Logo logo;
 
     @Embedded
-    private CorporateAccount account;
+    private CompanyPreferableOptions account;
 
 
     public Corporate(CorporateDTO corporateDTO)
