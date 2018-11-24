@@ -30,7 +30,8 @@ public class DataLoader implements CommandLineRunner
 //        launchpadParserService.fetchStartupLogos();
 //        launchpadParserService.fetchCorporatesData();
 
-        mattermarkParserService.ehnanceStartups();
+//        mattermarkParserService.ehnanceStartups();
+//        mattermarkParserService.ehnanceStartupsWithData();
 
 
     }

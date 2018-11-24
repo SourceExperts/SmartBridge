@@ -1,6 +1,8 @@
 package com.freemahn.smartbridge.dto;
 
 import com.freemahn.smartbridge.dao.Logo;
+import com.freemahn.smartbridge.dao.Startup;
+import com.freemahn.smartbridge.dao.mattermark.CompanyInfoDTO;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +30,12 @@ public class StartupDTO
     }
 
 
+//    public StartupDTO(Startup startup)
+//    {
+//        this.id = startup.getId().toString();
+//        this.type = startup.getType();
+//        this.name = startup.getName();
+//        this.shortDescription = startup
+//
+//    }
 }

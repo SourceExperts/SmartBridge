@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface StartupRepository extends JpaRepository<Startup, Long>
 {
     List<Startup> findAllByMetadataParsed(boolean metadataParsed);
+
+    List<Startup> findAllByMetadataCompanyIdNotNull();
 }

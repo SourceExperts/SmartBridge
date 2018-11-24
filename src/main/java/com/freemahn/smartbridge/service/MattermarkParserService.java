@@ -3,6 +3,7 @@ package com.freemahn.smartbridge.service;
 import com.freemahn.smartbridge.dao.CompanyMetadata;
 import com.freemahn.smartbridge.dao.CompanyMetadataDTO;
 import com.freemahn.smartbridge.dao.Startup;
+import com.freemahn.smartbridge.dao.mattermark.CompanyInfoDTO;
 import com.freemahn.smartbridge.repository.StartupRepository;
 import com.google.common.collect.Lists;
 import java.util.List;
@@ -24,6 +25,8 @@ public class MattermarkParserService
     private final StartupRepository startupRepository;
     private String key1 = "f7dea733ddef6142238c0fdf7562830c839b12e36e4f60bd22cbdb9ab326b2dc";
     private String key2 = "54029ab2d46e5d28a4daa319e2ba6257e87841f26a4943b4cf19275724348600";
+    private String key3 = "c98feaa85ac2e95dc6d2b5147dc2fb4fe75761fcc4bc5ef5e068288ff1b8da9f";
+
 
     public MattermarkParserService(StartupRepository startupRepository)
     {
@@ -98,33 +101,31 @@ public class MattermarkParserService
 
     }
 
-//    @Transactional
-//    public void enhanceWithData(Startup startup, String key, int group)
-//    {
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        Long metadataCompanyId = startup.getMetadataCompanyId();
-//        ResponseEntity<List<CompanyDataDto>> resp = restTemplate.exchange("https://api.mattermark.com/companies/" +
-//                metadataCompanyId + "?key=" + key,
-//            HttpMethod.GET, null, new ParameterizedTypeReference<List<CompanyDataDto>>()
-//            {
-//            });
-//        List<CompanyMetadataDTO> result = resp.getBody();
-//        if (result == null || result.isEmpty())
-//        {
-//            log.info("group {}. No metadata for startup {}", group, startup.getName());
-//            startup.setMetadataParsed(true);
-//            startupRepository.save(startup);
-//            return;
-//        }
-//        else
-//        {
-//            log.info("group {}. {} results for startup {}", group, result.size(), startup.getName());
-//        }
-//        List<CompanyMetadata> collect = result.stream().map(CompanyMetadata::new).collect(Collectors.toList());
-//        CompanyMetadata companyMetadata = collect.get(0);
-//        startup.setMetadataCompanyId(companyMetadata.getObjectId());
-//        startup.setMetadataParsed(true);
-//        startupRepository.save(startup);
-//    }
+
+    @Transactional
+    public void ehnanceStartupsWithData()
+    {
+        RestTemplate restTemplate = new RestTemplate();
+
+        List<Startup> startups = startupRepository.findAllByMetadataCompanyIdNotNull();
+        if (startups.isEmpty())
+        {
+            log.info("All startups are enhancedWithData");
+            return;
+        }
+        startups.forEach(startup -> {
+            log.info("Enhancing startup {}", startup.getName());
+            ResponseEntity<CompanyInfoDTO> resp =
+                restTemplate.exchange("https://api.mattermark.com/companies/" +
+                        startup.getMetadataCompanyId() + "?key=" + key3,
+                    HttpMethod.GET, null, new ParameterizedTypeReference<CompanyInfoDTO>()
+                    {
+                    });
+            CompanyInfoDTO result = resp.getBody();
+            startup.setInfo(result);
+            startupRepository.save(startup);
+        });
+
+
+    }
 }

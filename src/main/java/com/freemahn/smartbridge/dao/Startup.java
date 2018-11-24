@@ -1,5 +1,7 @@
 package com.freemahn.smartbridge.dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.freemahn.smartbridge.dao.mattermark.CompanyInfoDTO;
 import com.freemahn.smartbridge.dto.StartupDTO;
 import java.util.List;
 import javax.persistence.ElementCollection;
@@ -43,6 +45,10 @@ public class Startup
     private List<String> industries;
     @Embedded
     private Logo logo;
+
+
+    @Embedded
+    private CompanyInfoDTO info;
 
     private Long metadataCompanyId;
 
