@@ -44,8 +44,9 @@ public class Startup
     @Embedded
     private Logo logo;
 
-    @Embedded
-    private CompanyMetadata companyMetadata;
+    private Long metadataCompanyId;
+
+    private boolean metadataParsed = false;
 
 
     public Startup(StartupDTO startupDTO)
@@ -61,6 +62,7 @@ public class Startup
         this.country = startupDTO.getCountry();
         this.published = startupDTO.isPublished();
         this.industries = startupDTO.getIndustries();
+        this.logo = startupDTO.getLogo();
 
     }
 }

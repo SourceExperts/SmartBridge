@@ -1,9 +1,9 @@
 package com.freemahn.smartbridge.dto;
 
+import com.freemahn.smartbridge.dao.Logo;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -28,14 +28,6 @@ public class CorporateDTO
         industries = new ArrayList<>();
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class Logo
-    {
-        private Long id;
-        private String imageServiceUrl;
-        private String fileName;
-    }
+
 
 }

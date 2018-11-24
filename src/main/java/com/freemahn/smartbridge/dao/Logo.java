@@ -1,7 +1,7 @@
 package com.freemahn.smartbridge.dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Logo
 {
-    @Id
-    private Long id;
-    private String imageServiceUrl;
-    private String fileName;
+    @JsonProperty("id")
+    private String logoId;
+    @JsonProperty("imageServiceUrl")
+    private String logoImageServiceUrl;
+    @JsonProperty("fileName")
+    private String logoFileName;
 }

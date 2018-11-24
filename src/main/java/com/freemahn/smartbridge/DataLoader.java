@@ -1,6 +1,5 @@
 package com.freemahn.smartbridge;
 
-import com.freemahn.smartbridge.repository.StartupRepository;
 import com.freemahn.smartbridge.service.LaunchpadParserService;
 import com.freemahn.smartbridge.service.MattermarkParserService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +26,9 @@ public class DataLoader implements CommandLineRunner
     public void run(String... args) throws Exception
     {
         //if required
-        launchpadParserService.fetchStartupData();
-        launchpadParserService.fetchCorporatesData();
+//        launchpadParserService.fetchStartupData();
+//        launchpadParserService.fetchStartupLogos();
+//        launchpadParserService.fetchCorporatesData();
 
         mattermarkParserService.ehnanceStartups();
 
