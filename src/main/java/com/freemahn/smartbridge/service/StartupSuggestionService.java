@@ -7,6 +7,7 @@ import com.freemahn.smartbridge.dao.match.Bridge;
 import com.freemahn.smartbridge.repository.BridgeRepository;
 import com.freemahn.smartbridge.repository.CorporateRepository;
 import com.freemahn.smartbridge.repository.StartupRepository;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -41,12 +42,14 @@ public class StartupSuggestionService
     @Transactional
     public List<Startup> doSuggestionMagic(long companyId)
     {
+
         Corporate corporate = corporateRepository.getOne(companyId);
+
         CompanyPreferableOptions companyPreferableOptions = corporate.getAccount();
+//        log.info("Corporate preferences {}", companyPreferableOptions.getLocation(), );
         List<Startup> startups = startupRepository.findAll();
 
         List<Startup> filteredBy3Startups = startups.stream().filter(startup -> {
-
                 boolean industriesEqual = startup.getIndustries().stream().map(String::toLowerCase).collect(Collectors.toList())
                     .contains(companyPreferableOptions.getIndustry().toLowerCase());
                 boolean cityEqual = startup.getCity().equalsIgnoreCase(companyPreferableOptions.getLocation());
@@ -112,11 +115,13 @@ public class StartupSuggestionService
                 {
                     return x.getInfo().getMattermarkScore() - y.getInfo().getMattermarkScore();
                 }
-                
-                if(x.getInfo().getMattermarkScore() == null){
+
+                if (x.getInfo().getMattermarkScore() == null)
+                {
                     return -1;
                 }
-                if(y.getInfo().getMattermarkScore() == null){
+                if (y.getInfo().getMattermarkScore() == null)
+                {
                     return 1;
                 }
             }
@@ -155,7 +160,9 @@ public class StartupSuggestionService
     {
         CompanyPreferableOptions defaultCorporateCompanyPreferableOptions = corporateRepository.getOne(companyId).getAccount();
         List<Bridge> previousMatches = bridgeService.findByBridgeRequest(defaultCorporateCompanyPreferableOptions);
-        return previousMatches.stream().map(Bridge::getMatchedStartup).limit(3).collect(Collectors.toList());
+        List<Startup> startups = previousMatches.stream().map(Bridge::getMatchedStartup).collect(Collectors.toList());
+        Collections.shuffle(startups);
+        return startups.stream().limit(3).collect(Collectors.toList());
     }
 
 

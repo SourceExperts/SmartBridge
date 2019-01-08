@@ -49,6 +49,7 @@ public class Startup
     @Embedded
     private Logo logo;
 
+    private Integer amountOfBridges = 0;
 
     @Embedded
     private CompanyInfoDTO info;

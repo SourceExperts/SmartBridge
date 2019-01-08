@@ -67,6 +67,8 @@ public class BridgeService
             .description(payload.getDescription())
             .build();
         bridgeRepository.save(bridge);
+        startup.setAmountOfBridges(startup.getAmountOfBridges() + 1);
+        startupRepository.save(startup);
         log.info("Bridge {} created. Matched company {} with startup {}", payload.getName(),
             corporate, startup);
     }

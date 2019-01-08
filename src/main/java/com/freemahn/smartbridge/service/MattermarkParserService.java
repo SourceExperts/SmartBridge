@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 public class MattermarkParserService
 {
     private final StartupRepository startupRepository;
+    //TODO generate keys
     private String key1 = "f7dea733ddef6142238c0fdf7562830c839b12e36e4f60bd22cbdb9ab326b2dc";
     private String key2 = "54029ab2d46e5d28a4daa319e2ba6257e87841f26a4943b4cf19275724348600";
     private String key3 = "c98feaa85ac2e95dc6d2b5147dc2fb4fe75761fcc4bc5ef5e068288ff1b8da9f";
@@ -64,6 +65,7 @@ public class MattermarkParserService
     }
 
 
+    //TODO refactor
     @Transactional
     public void ehnanceStartups()
     {
